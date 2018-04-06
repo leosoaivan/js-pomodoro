@@ -1,18 +1,18 @@
-// const time = document.getElementById('time')
 const arrowToAddTime = document.getElementById('add-arrow')
 const arrowToRemoveTime = document.getElementById('remove-arrow')
 const startButton = document.getElementById('startbutton')
+const arrowsToChangeTime = document.querySelectorAll('.changetime')
 
 function returnTimeInParts(initialTime) {
   let seconds = Math.floor(initialTime % 60);
   let minutes = Math.floor((initialTime/60) % 60);
   return {
-    'seconds': checkTime(seconds),
-    'minutes': checkTime(minutes)
+    'seconds': justifySingleDigits(seconds),
+    'minutes': justifySingleDigits(minutes)
   }
 }
 
-function checkTime(i) {
+function justifySingleDigits(i) {
   if (i < 10) { i = "0" + i };
   return i
 }
@@ -54,16 +54,19 @@ function updateTimeDisplayed(timeInSeconds) {
 }
 
 // Click actions
-arrowToAddTime.addEventListener("click", function() {
-  newTime = addMinute();
-  updateTimeDisplayed(newTime);
-})
-
-arrowToRemoveTime.addEventListener("click", function() {
-  newTime = removeMinute();
-  updateTimeDisplayed(newTime);
-})
-
 startButton.addEventListener("click", function(){
   runTime(5)
 });
+
+arrowsToChangeTime.forEach(function(elem) {
+  elem.addEventListener("click", function() {
+    switch (elem.id) {
+      case 'add-arrow':
+        updateTimeDisplayed(addMinute());
+        break;
+      case 'remove-arrow':
+        updateTimeDisplayed(removeMinute());
+        break;
+    }
+  })
+})
