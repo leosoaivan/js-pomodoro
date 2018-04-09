@@ -1,3 +1,5 @@
+// Body elements
+const body = document.getElementsByTagName('body')
 const arrowToAddTime = document.getElementById('add-arrow')
 const arrowToRemoveTime = document.getElementById('remove-arrow')
 const startButton = document.getElementById('startbutton')
@@ -17,11 +19,11 @@ function justifySingleDigits(i) {
   return i
 }
 
-function runTime(initialTime){
+function runClock(initialTime){
   let timeInterval = setInterval(function(){
     initialTime -= 1
     
-    let t = returnTime(initialTime)
+    let t = returnTimeInParts(initialTime)
     time.innerText = t.minutes + ":" + t.seconds
 
     if(initialTime <= 0){
@@ -54,19 +56,34 @@ function updateTimeDisplayed(timeInSeconds) {
 }
 
 // Click actions
-startButton.addEventListener("click", function(){
-  runTime(5)
+startButton.addEventListener("click", function() {
+  this.disabled = true;
+  hideArrows();
+  secondsToRun = returnCurrentMinutes() * 60
+  runClock(secondsToRun)
 });
 
-arrowsToChangeTime.forEach(function(elem) {
-  elem.addEventListener("click", function() {
-    switch (elem.id) {
-      case 'add-arrow':
-        updateTimeDisplayed(addMinute());
-        break;
-      case 'remove-arrow':
-        updateTimeDisplayed(removeMinute());
-        break;
-    }
-  })
+
+// Functions to edit timer
+
+arrowsToChangeTime.forEach(elem => {
+  const listener = () => changeTime(elem)
+  elem.addEventListener("click", listener)
 })
+
+function changeTime(elem) {
+  switch (elem.id) {
+    case 'add-arrow':
+      updateTimeDisplayed(addMinute());
+      break;
+    case 'remove-arrow':
+      updateTimeDisplayed(removeMinute());
+      break;
+  }
+}
+
+function hideArrows() {
+  arrowsToChangeTime.forEach(elem => {
+    elem.style.visibility = "hidden";
+  })
+}
