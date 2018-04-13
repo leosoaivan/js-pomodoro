@@ -11,33 +11,30 @@ let runningClock = null
 
 // Event listeners
 startButton.addEventListener("click", function() {
-  startButton.disabled = true;
-  pauseButton.disabled = false;
-  
+  toggleButton(this.id)
   runClock();
   hideArrows();
+
   body.style.backgroundColor = 'LightGreen';
 });
 
 pauseButton.addEventListener("click", function() {
   if (runningClock) {
-    startButton.disabled = false;
-    pauseButton.disabled = true
-    
+    toggleButton(this.id)
     pauseClock();
     showArrows();
+
     body.style.backgroundColor = 'LightSalmon';
   }
 });
 
 resetButton.addEventListener("click", function() {
-  startButton.disabled = false
-  pauseButton.disabled = false
-
+  toggleButton(this.id)
   pauseClock();
   showArrows();
-  body.style.backgroundColor = 'White'
   updateTimeDisplayed(25 * 60)
+
+  body.style.backgroundColor = 'White'
   currentProgress.style.width = 0
 })
 
@@ -56,6 +53,23 @@ function showArrows() {
   arrowsToChangeTimer.forEach(elem => {
     elem.style.visibility = "visible";
   })
+}
+
+function toggleButton(buttonID) {
+  switch (buttonID) {
+    case 'startButton':
+      startButton.disabled = true;
+      pauseButton.disabled = false;
+      break;
+    case 'pauseButton':
+      startButton.disabled = false;
+      pauseButton.disabled = true;
+      break;
+    case 'resetButton':
+      startButton.disabled = false;
+      pauseButton.disabled = false;
+      break;
+  }
 }
 
 // Timer clock functions
@@ -77,6 +91,8 @@ function runClock(){
     countDown();
     progress(initialTime);
   }, 1000)
+
+  currentProgress.style.backgroundColor = "DarkGreen"
 }
 
 function pauseClock(){
