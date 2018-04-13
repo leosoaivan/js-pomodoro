@@ -1,77 +1,72 @@
 // Body elements
-const body = document.getElementsByTagName('body')
+const body = document.body
 const arrowToAddTime = document.getElementById('add-arrow')
 const arrowToRemoveTime = document.getElementById('remove-arrow')
 const startButton = document.getElementById('startbutton')
-const arrowsToChangeTime = document.querySelectorAll('.changetime')
+const pauseButton = document.getElementById('pausebutton')
+const arrowsToChangeTimer = document.querySelectorAll('.changetime')
+let runningClock = null
 
-function returnTimeInParts(initialTime) {
-  let seconds = Math.floor(initialTime % 60);
-  let minutes = Math.floor((initialTime/60) % 60);
-  return {
-    'seconds': justifySingleDigits(seconds),
-    'minutes': justifySingleDigits(minutes)
-  }
-}
-
-function justifySingleDigits(i) {
-  if (i < 10) { i = "0" + i };
-  return i
-}
-
-function runClock(initialTime){
-  let timeInterval = setInterval(function(){
-    initialTime -= 1
-    
-    let t = returnTimeInParts(initialTime)
-    time.innerText = t.minutes + ":" + t.seconds
-
-    if(initialTime <= 0){
-      alert('Finished');
-      clearInterval(timeInterval);
-    }
-  }, 1000)
-}
-
-function returnCurrentMinutes() {
-  minutesString = document.getElementById('time').innerText.match(/\d+/)
-  return Number(minutesString)
-}
-
-function addMinute() {
-  timeInSeconds = returnCurrentMinutes() * 60;
-  timeInSeconds += 60;
-  return timeInSeconds;
-}
-
-function removeMinute() {
-  timeInSeconds = returnCurrentMinutes() * 60;
-  timeInSeconds -= 60;
-  return timeInSeconds;
-}
-
-function updateTimeDisplayed(timeInSeconds) {
-  let t = returnTimeInParts(timeInSeconds)
-  time.innerText = t.minutes + ":" + t.seconds
-}
-
-// Click actions
+// Event listeners
 startButton.addEventListener("click", function() {
   this.disabled = true;
+  pauseButton.disabled = false;
+  
+  runClock();
   hideArrows();
-  secondsToRun = returnCurrentMinutes() * 60
-  runClock(secondsToRun)
+  body.style.backgroundColor = 'LightGreen';
 });
 
+pauseButton.addEventListener("click", function() {
+  this.disabled = true
+  startButton.disabled = false;
 
-// Functions to edit timer
+  pauseClock();
+  showArrows();
+  body.style.backgroundColor = 'LightSalmon';
+});
 
-arrowsToChangeTime.forEach(elem => {
-  const listener = () => changeTime(elem)
+arrowsToChangeTimer.forEach(elem => {
+  const listener = () => changeTimer(elem)
   elem.addEventListener("click", listener)
 })
 
-function changeTime(elem) {
+function hideArrows() {
+  arrowsToChangeTime.forEach(elem => {
+    elem.style.visibility = "hidden";
+  })
+}
+
+function showArrows() {
+  arrowsToChangeTime.forEach(elem => {
+    elem.style.visibility = "visible";
+  })
+}
+
+// Timer clock functions
+function countDown(){
+  let currentSeconds = getDisplayedTimeInSeconds();
+  currentSeconds -= 1
+  
+  updateTimeDisplayed(currentSeconds)
+
+  if(currentSeconds <= 0){
+    alert('Finished');
+    clearInterval(runningClock);
+  }
+}
+
+function runClock(){
+  runningClock = setInterval(function(){
+    countDown();
+  }, 1000)
+}
+
+function pauseClock(){
+  clearInterval(runningClock);
+}
+
+function changeTimer(elem) {
   switch (elem.id) {
     case 'add-arrow':
       updateTimeDisplayed(addMinute());
@@ -82,8 +77,41 @@ function changeTime(elem) {
   }
 }
 
-function hideArrows() {
-  arrowsToChangeTime.forEach(elem => {
-    elem.style.visibility = "hidden";
-  })
+function updateTimeDisplayed(timeInSeconds) {
+  let t = returnTimeInParts(timeInSeconds)
+  time.innerText = t.minutes + ":" + t.seconds
+}
+
+function addMinute() {
+  timeInSeconds = getDisplayedTimeInSeconds();
+  timeInSeconds += 60;
+  return timeInSeconds;
+}
+
+function removeMinute() {
+  timeInSeconds = getDisplayedTimeInSeconds();
+  timeInSeconds -= 60;
+  return timeInSeconds;
+}
+
+// Timer display functions
+function justifySingleDigits(i) {
+  if (i < 10) { i = "0" + i };
+  return i
+}
+
+function returnTimeInParts(time) {
+  let seconds = Math.floor(time % 60);
+  let minutes = Math.floor((time / 60) % 60);
+  return {
+    'seconds': justifySingleDigits(seconds),
+    'minutes': justifySingleDigits(minutes)
+  }
+}
+
+function getDisplayedTimeInSeconds() {
+  minutesString = document.getElementById('time').innerText.match(/^\d+/)
+  secondsString = document.getElementById('time').innerText.match(/\d+$/)
+
+  return (Number(minutesString) * 60 + Number(secondsString))
 }
