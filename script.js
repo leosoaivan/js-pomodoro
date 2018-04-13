@@ -4,6 +4,7 @@ const arrowToAddTime = document.getElementById('add-arrow')
 const arrowToRemoveTime = document.getElementById('remove-arrow')
 const startButton = document.getElementById('startbutton')
 const pauseButton = document.getElementById('pausebutton')
+const resetButton = document.getElementById('resetbutton')
 const arrowsToChangeTimer = document.querySelectorAll('.changetime')
 let runningClock = null
 
@@ -26,19 +27,25 @@ pauseButton.addEventListener("click", function() {
   body.style.backgroundColor = 'LightSalmon';
 });
 
+resetButton.addEventListener("click", function() {
+  pauseClock();
+  showArrows();
+  body.style.backgroundColor = 'White'
+})
+
 arrowsToChangeTimer.forEach(elem => {
   const listener = () => changeTimer(elem)
   elem.addEventListener("click", listener)
 })
 
 function hideArrows() {
-  arrowsToChangeTime.forEach(elem => {
+  arrowsToChangeTimer.forEach(elem => {
     elem.style.visibility = "hidden";
   })
 }
 
 function showArrows() {
-  arrowsToChangeTime.forEach(elem => {
+  arrowsToChangeTimer.forEach(elem => {
     elem.style.visibility = "visible";
   })
 }
