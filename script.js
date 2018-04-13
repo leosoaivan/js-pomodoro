@@ -21,8 +21,8 @@ startButton.addEventListener("click", function() {
 
 pauseButton.addEventListener("click", function() {
   if (runningClock) {
-    pauseButton.disabled = true
     startButton.disabled = false;
+    pauseButton.disabled = true
     
     pauseClock();
     showArrows();
