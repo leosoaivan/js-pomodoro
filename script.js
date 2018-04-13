@@ -10,7 +10,7 @@ let runningClock = null
 
 // Event listeners
 startButton.addEventListener("click", function() {
-  this.disabled = true;
+  startButton.disabled = true;
   pauseButton.disabled = false;
   
   runClock();
@@ -19,18 +19,24 @@ startButton.addEventListener("click", function() {
 });
 
 pauseButton.addEventListener("click", function() {
-  this.disabled = true
-  startButton.disabled = false;
-
-  pauseClock();
-  showArrows();
-  body.style.backgroundColor = 'LightSalmon';
+  if (runningClock) {
+    pauseButton.disabled = true
+    startButton.disabled = false;
+    
+    pauseClock();
+    showArrows();
+    body.style.backgroundColor = 'LightSalmon';
+  }
 });
 
 resetButton.addEventListener("click", function() {
+  startButton.disabled = false
+  pauseButton.disabled = false
+
   pauseClock();
   showArrows();
   body.style.backgroundColor = 'White'
+  updateTimeDisplayed(25 * 60)
 })
 
 arrowsToChangeTimer.forEach(elem => {
