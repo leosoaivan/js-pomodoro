@@ -2,10 +2,11 @@
 const body = document.body
 const arrowToAddTime = document.getElementById('add-arrow')
 const arrowToRemoveTime = document.getElementById('remove-arrow')
-const startButton = document.getElementById('startbutton')
-const pauseButton = document.getElementById('pausebutton')
-const resetButton = document.getElementById('resetbutton')
+const startButton = document.getElementById('startButton')
+const pauseButton = document.getElementById('pauseButton')
+const resetButton = document.getElementById('resetButton')
 const arrowsToChangeTimer = document.querySelectorAll('.changetime')
+const currentProgress = document.getElementById('currentProgress')
 let runningClock = null
 
 // Event listeners
@@ -37,6 +38,7 @@ resetButton.addEventListener("click", function() {
   showArrows();
   body.style.backgroundColor = 'White'
   updateTimeDisplayed(25 * 60)
+  currentProgress.style.width = 0
 })
 
 arrowsToChangeTimer.forEach(elem => {
@@ -70,13 +72,16 @@ function countDown(){
 }
 
 function runClock(){
+  let initialTime = getDisplayedTimeInSeconds();
   runningClock = setInterval(function(){
     countDown();
+    progress(initialTime);
   }, 1000)
 }
 
 function pauseClock(){
   clearInterval(runningClock);
+  currentProgress.style.backgroundColor = "DarkRed"
 }
 
 function changeTimer(elem) {
@@ -96,13 +101,13 @@ function updateTimeDisplayed(timeInSeconds) {
 }
 
 function addMinute() {
-  timeInSeconds = getDisplayedTimeInSeconds();
+  let timeInSeconds = getDisplayedTimeInSeconds();
   timeInSeconds += 60;
   return timeInSeconds;
 }
 
 function removeMinute() {
-  timeInSeconds = getDisplayedTimeInSeconds();
+  let timeInSeconds = getDisplayedTimeInSeconds();
   timeInSeconds -= 60;
   return timeInSeconds;
 }
@@ -123,8 +128,16 @@ function returnTimeInParts(time) {
 }
 
 function getDisplayedTimeInSeconds() {
-  minutesString = document.getElementById('time').innerText.match(/^\d+/)
-  secondsString = document.getElementById('time').innerText.match(/\d+$/)
+  let minutesString = document.getElementById('time').innerText.match(/^\d+/)
+  let secondsString = document.getElementById('time').innerText.match(/\d+$/)
 
   return (Number(minutesString) * 60 + Number(secondsString))
+}
+
+// Progress bar
+function progress(initialTime){
+  let timePassed = initialTime - getDisplayedTimeInSeconds()
+  let percentOfCompletedTime = timePassed / initialTime * 100
+
+  currentProgress.style.width = percentOfCompletedTime + "%"
 }
