@@ -7,6 +7,11 @@ const pauseButton = document.getElementById('pauseButton')
 const resetButton = document.getElementById('resetButton')
 const arrowsToChangeTimer = document.querySelectorAll('.changetime')
 const currentProgress = document.getElementById('currentProgress')
+const standardMinutes = 25
+
+let totalTime = getDisplayedTimeInSeconds();
+let timeToRun = getDisplayedTimeInSeconds();
+let runTime = 0
 let runningClock = null
 
 // Event listeners
@@ -29,13 +34,15 @@ pauseButton.addEventListener("click", function() {
 });
 
 resetButton.addEventListener("click", function() {
+  let standartTimer = standardMinutes * 60
   toggleButton(this.id)
   pauseClock();
   showArrows();
-  updateTimeDisplayed(25 * 60)
-
+  updateTimeDisplayed(standartTimer)
+  totalTime = timeToRun = standartTimer
+  runTime = currentProgress.style.width = 0
+  runningClock = null
   body.style.backgroundColor = 'White'
-  currentProgress.style.width = 0
 })
 
 arrowsToChangeTimer.forEach(elem => {
@@ -73,26 +80,25 @@ function toggleButton(buttonID) {
 }
 
 // Timer clock functions
-function countDown(){
-  let currentSeconds = getDisplayedTimeInSeconds();
-  currentSeconds -= 1
+function runClock(){
+  runningClock = setInterval(function(){
+    countDown();
+    updateProgressBar();
+  }, 1000)
   
-  updateTimeDisplayed(currentSeconds)
+  currentProgress.style.backgroundColor = "DarkGreen"
+}
 
-  if(currentSeconds <= 0){
+function countDown(){
+  timeToRun -= 1
+  runTime++
+  
+  updateTimeDisplayed(timeToRun)
+
+  if(timeToRun <= 0){
     alert('Finished');
     clearInterval(runningClock);
   }
-}
-
-function runClock(){
-  let initialTime = getDisplayedTimeInSeconds();
-  runningClock = setInterval(function(){
-    countDown();
-    progress(initialTime);
-  }, 1000)
-
-  currentProgress.style.backgroundColor = "DarkGreen"
 }
 
 function pauseClock(){
@@ -118,13 +124,27 @@ function updateTimeDisplayed(timeInSeconds) {
 
 function addMinute() {
   let timeInSeconds = getDisplayedTimeInSeconds();
-  timeInSeconds += 60;
+
+  if (timeInSeconds < 3540) {
+    timeInSeconds += 60;
+    totalTime += 60;
+    timeToRun += 60;
+    updateProgressBar();
+  }
+
   return timeInSeconds;
 }
 
 function removeMinute() {
   let timeInSeconds = getDisplayedTimeInSeconds();
-  timeInSeconds -= 60;
+
+  if (timeInSeconds > 60) {
+    timeInSeconds -= 60;
+    totalTime -= 60;
+    timeToRun -= 60;
+    updateProgressBar();
+  }
+  
   return timeInSeconds;
 }
 
@@ -151,9 +171,15 @@ function getDisplayedTimeInSeconds() {
 }
 
 // Progress bar
-function progress(initialTime){
-  let timePassed = initialTime - getDisplayedTimeInSeconds()
-  let percentOfCompletedTime = timePassed / initialTime * 100
+function updateProgressBar() {
+  let percent = getProgressPercent(runTime);
+  setProgressBarWidth(percent);
+}
 
-  currentProgress.style.width = percentOfCompletedTime + "%"
+function getProgressPercent(runTime) {
+  return (runTime / totalTime * 100)
+}
+
+function setProgressBarWidth(percent) {
+  currentProgress.style.width = percent + "%"
 }
