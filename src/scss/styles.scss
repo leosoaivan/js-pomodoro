@@ -1,0 +1,65 @@
+/* Mobile styles */
+@media only screen and (max-width: 400px) {
+  
+}
+
+/* Tablet styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+  
+}
+
+/* Desktop styles */
+
+@media only screen and (min-width: 961px) {
+  
+}
+
+/* Timer */
+#timer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 125px;
+}
+
+#time {
+  font-family: 'Roboto Mono';
+  font-size: 2em;
+}
+
+#progressBar {
+  width: 80%;
+  background-color: rgba(255, 255, 255, .2);
+  border: 1px solid rgba(0, 0, 0, .2);
+  margin: 25px auto;
+}
+
+#currentProgress {
+  height: 5px;
+  width: 0%;
+}
+
+/* Arrows */
+.arrow {
+  margin: 0px 15px;
+  vertical-align: middle;
+}
+
+/* Buttons */
+#buttons {
+  margin-top: 25px;
+  text-align: center;
+}
+
+button {
+  border: none;
+  border-radius: 3px;
+  background-color: lightgrey;
+  padding: 15px 25px;
+
+  :hover {
+    opacity: 1;
+  }
+}

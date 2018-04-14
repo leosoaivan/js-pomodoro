@@ -1,0 +1,39 @@
+{
+  "name": "js-pomodoro",
+  "description": "A vanilla JS Pomodoro timer",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leosoaivan/js-pomodoro.git"
+  },
+  "dependencies": {
+    "postcss-node-sass": "^2.1.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^8.2.0",
+    "browser-sync": "^2.23.6",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "node-sass": "^4.8.3",
+    "postcss-cli": "^5.0.0",
+    "uglify-es": "^3.3.9"
+  },
+  "scripts": {
+    "scss": "npx node-sass --output-style compressed -o dist/css src/scss",
+    "autoprefixer": "npx postcss -u autoprefixer -r dist/css/*",
+    "lint": "eslint src/js",
+    "uglify": "npx uglify-es src/js/*.js -m -o dist/js/app.js && npx uglify-es src/js/*.js -m -c -o dist/js/app.min.js",
+    "serve": "npx browser-sync start --server --files 'dist/css/*.css, dist/js/*.js'",
+    "build:css": "npm run scss && npm run autoprefixer",
+    "build:js": "npm run lint -s && npm run uglify",
+    "build:all": "npm run build:css && npm run build:js",
+    "watch:css": "npx onchange 'src/scss/*.scss' -- npm run build:css",
+    "watch:js": "npx onchange 'src/js/*.js' -- npm run build:js",
+    "watch:all": "npx parallelshell 'npm run serve' 'npm run watch:css' 'npm run watch:js'"
+  }
+}
