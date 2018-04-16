@@ -10,20 +10,26 @@ const defaultMinutes = 25
 
 let totalTime = getDisplayedTimeInSeconds()
 let timeToRun = getDisplayedTimeInSeconds()
+let breakToRun = 300
 let runTime = 0
 let runningClock = null
+let runningBreak = null
 
 // Event listeners
 startButton.addEventListener('click', function () {
   toggleButton(this.id)
-  runClock()
   hideArrows()
 
-  body.style.backgroundColor = 'LightGreen'
+  if (runningClock === null) {
+    runClock()
+    body.style.backgroundColor = 'LightGreen'
+  } else {
+    runBreak()
+  }
 })
 
 pauseButton.addEventListener('click', function () {
-  if (runningClock) {
+  if (runningClock || runningBreak) {
     toggleButton(this.id)
     pauseClock()
     showArrows()
@@ -33,16 +39,21 @@ pauseButton.addEventListener('click', function () {
 })
 
 resetButton.addEventListener('click', function () {
+  resetAll(this)
+})
+
+function resetAll (elem) {
   let standartTimer = defaultMinutes * 60
-  toggleButton(this.id)
+  toggleButton(elem.id)
   pauseClock()
   showArrows()
   updateTimeDisplayed(standartTimer)
   totalTime = timeToRun = standartTimer
+  breakToRun = 300
+  runningClock = runningBreak = null
   runTime = currentProgress.style.width = 0
-  runningClock = null
   body.style.backgroundColor = 'White'
-})
+}
 
 arrowsToChangeTimer.forEach(elem => {
   const listener = () => changeTimer(elem)
@@ -91,16 +102,34 @@ function runClock () {
 function countDown () {
   timeToRun -= 1
   runTime++
-
+  
   updateTimeDisplayed(timeToRun)
-
-  if (timeToRun <= 0) {
+  
+  if (timeToRun === 0) {
     clearInterval(runningClock)
+    updateTimeDisplayed(breakToRun)
+    runBreak()
   }
+}
+
+function runBreak () {
+  runningBreak = setInterval(function () {
+    breakToRun -= 1
+    updateTimeDisplayed(breakToRun)
+
+    if (breakToRun === 0) {
+      clearInterval(runningBreak)
+      resetAll()
+    }
+  }, 1000)
+
+  body.style.backgroundColor = 'Orange'
+  currentProgress.style.backgroundColor = 'DarkOrange'
 }
 
 function pauseClock () {
   clearInterval(runningClock)
+  clearInterval(runningBreak)
   currentProgress.style.backgroundColor = 'DarkRed'
 }
 
