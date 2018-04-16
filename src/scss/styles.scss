@@ -9,11 +9,6 @@
   }
 }
 
-/* Tablet styles */
-@media only screen and (min-width: 401px) and (max-width: 960px) {
-  
-}
-
 /* Desktop styles */
 @media only screen and (min-width: 961px) {
   #timer {
@@ -23,7 +18,6 @@
   #progressBar {
     width: 60%;
   }
-  
 }
 
 /* Timer */
@@ -64,7 +58,7 @@
   margin-left: 15px;
 }
 
-/* Buttons */
+/* Buttons and links */
 #buttons {
   margin-top: 25px;
   text-align: center;
@@ -93,4 +87,21 @@ button {
   &:active {
     outline: none;
   }
+}
+
+a {
+  &:visited {
+    color: black;
+  }
+
+  &:active {
+    color: red;
+  }
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
 }
