@@ -6,7 +6,7 @@ const pauseButton = document.getElementById('pauseButton')
 const resetButton = document.getElementById('resetButton')
 const arrowsToChangeTimer = document.querySelectorAll('.arrow')
 const currentProgress = document.getElementById('currentProgress')
-const standardMinutes = 25
+const defaultMinutes = 25
 
 let totalTime = getDisplayedTimeInSeconds()
 let timeToRun = getDisplayedTimeInSeconds()
@@ -33,7 +33,7 @@ pauseButton.addEventListener('click', function () {
 })
 
 resetButton.addEventListener('click', function () {
-  let standartTimer = standardMinutes * 60
+  let standartTimer = defaultMinutes * 60
   toggleButton(this.id)
   pauseClock()
   showArrows()
@@ -106,11 +106,17 @@ function pauseClock () {
 
 function changeTimer (elem) {
   switch (elem.id) {
-    case 'add-arrow':
+    case 'increase-by-one':
       updateTimeDisplayed(addMinute())
       break
-    case 'remove-arrow':
+    case 'increase-by-five':
+      updateTimeDisplayed(addMinute(5))
+      break
+    case 'decrease-by-one':
       updateTimeDisplayed(removeMinute())
+      break
+    case 'decrease-by-five':
+      updateTimeDisplayed(removeMinute(5))
       break
   }
 }
@@ -120,26 +126,26 @@ function updateTimeDisplayed (timeInSeconds) {
   time.innerText = t.minutes + ':' + t.seconds
 }
 
-function addMinute () {
+function addMinute (multiplier = 1) {
   let timeInSeconds = getDisplayedTimeInSeconds()
 
-  if (timeInSeconds < 3540) {
-    timeInSeconds += 60
-    totalTime += 60
-    timeToRun += 60
+  if (timeInSeconds < (3660 - multiplier * 60)) {
+    timeInSeconds += (60 * multiplier)
+    totalTime += (60 * multiplier)
+    timeToRun += (60 * multiplier)
     updateProgressBar()
   }
 
   return timeInSeconds
 }
 
-function removeMinute () {
+function removeMinute (multiplier = 1) {
   let timeInSeconds = getDisplayedTimeInSeconds()
 
-  if (timeInSeconds > 60) {
-    timeInSeconds -= 60
-    totalTime -= 60
-    timeToRun -= 60
+  if (timeInSeconds > 60 * multiplier) {
+    timeInSeconds -= (60 * multiplier)
+    totalTime -= (60 * multiplier)
+    timeToRun -= (60 * multiplier)
     updateProgressBar()
   }
 
@@ -154,7 +160,7 @@ function justifySingleDigits (i) {
 
 function returnTimeInParts (time) {
   let seconds = Math.floor(time % 60)
-  let minutes = Math.floor((time / 60) % 60)
+  let minutes = Math.floor((time / 60) % 61)
   return {
     'seconds': justifySingleDigits(seconds),
     'minutes': justifySingleDigits(minutes)
