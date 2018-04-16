@@ -4,6 +4,7 @@ const time = document.getElementById('time')
 const startButton = document.getElementById('startButton')
 const pauseButton = document.getElementById('pauseButton')
 const resetButton = document.getElementById('resetButton')
+const buttons = document.querySelectorAll('button');
 const arrowsToChangeTimer = document.querySelectorAll('.arrow')
 const currentProgress = document.getElementById('currentProgress')
 const defaultMinutes = 25
@@ -16,31 +17,44 @@ let runningClock = null
 let runningBreak = null
 
 // Event listeners
-startButton.addEventListener('click', function () {
-  toggleButton(this.id)
-  hideArrows()
+buttons.forEach(elem => {
+  const buttonAction = () => buttonFunction(elem)
+  elem.addEventListener('click', buttonAction)
+})
 
-  if (runningClock === null) {
+function buttonFunction (elem) {
+  switch(elem.id) {
+    case 'startButton':
+      startPomodoro(elem)
+      break
+    case 'pauseButton':
+      pausePomodoro(elem)
+      break
+    case 'resetButton':
+      resetAll(elem)
+      break
+  }
+}
+
+function startPomodoro (elem) {
+  toggleButton(elem.id)
+  hideArrows()
+  
+  if (runningClock === null || runningClock != 0) {
     runClock()
     body.style.backgroundColor = 'LightGreen'
   } else {
     runBreak()
   }
-})
+}
 
-pauseButton.addEventListener('click', function () {
-  if (runningClock || runningBreak) {
-    toggleButton(this.id)
-    pauseClock()
-    showArrows()
+function pausePomodoro (elem) {
+  toggleButton(elem.id)
+  pauseClock()
+  showArrows()
 
-    body.style.backgroundColor = 'LightSalmon'
-  }
-})
-
-resetButton.addEventListener('click', function () {
-  resetAll(this)
-})
+  body.style.backgroundColor = 'LightSalmon'
+}
 
 function resetAll (elem) {
   let standartTimer = defaultMinutes * 60
@@ -59,6 +73,23 @@ arrowsToChangeTimer.forEach(elem => {
   const listener = () => changeTimer(elem)
   elem.addEventListener('click', listener)
 })
+
+function changeTimer (elem) {
+  switch (elem.id) {
+    case 'increase-by-one':
+      updateTimeDisplayed(addMinute())
+      break
+    case 'increase-by-five':
+      updateTimeDisplayed(addMinute(5))
+      break
+    case 'decrease-by-one':
+      updateTimeDisplayed(removeMinute())
+      break
+    case 'decrease-by-five':
+      updateTimeDisplayed(removeMinute(5))
+      break
+  }
+}
 
 function hideArrows () {
   arrowsToChangeTimer.forEach(elem => {
@@ -107,6 +138,7 @@ function countDown () {
   
   if (timeToRun === 0) {
     clearInterval(runningClock)
+    runningClock = 0
     updateTimeDisplayed(breakToRun)
     runBreak()
   }
@@ -131,23 +163,6 @@ function pauseClock () {
   clearInterval(runningClock)
   clearInterval(runningBreak)
   currentProgress.style.backgroundColor = 'DarkRed'
-}
-
-function changeTimer (elem) {
-  switch (elem.id) {
-    case 'increase-by-one':
-      updateTimeDisplayed(addMinute())
-      break
-    case 'increase-by-five':
-      updateTimeDisplayed(addMinute(5))
-      break
-    case 'decrease-by-one':
-      updateTimeDisplayed(removeMinute())
-      break
-    case 'decrease-by-five':
-      updateTimeDisplayed(removeMinute(5))
-      break
-  }
 }
 
 function updateTimeDisplayed (timeInSeconds) {
