@@ -3,8 +3,7 @@ const body = document.body
 const time = document.getElementById('time')
 const startButton = document.getElementById('startButton')
 const pauseButton = document.getElementById('pauseButton')
-const resetButton = document.getElementById('resetButton')
-const buttons = document.querySelectorAll('button');
+const buttons = document.querySelectorAll('button')
 const arrowsToChangeTimer = document.querySelectorAll('.arrow')
 const currentProgress = document.getElementById('currentProgress')
 const defaultMinutes = 25
@@ -23,7 +22,7 @@ buttons.forEach(elem => {
 })
 
 function buttonFunction (elem) {
-  switch(elem.id) {
+  switch (elem.id) {
     case 'startButton':
       startPomodoro(elem)
       break
@@ -40,7 +39,7 @@ function startPomodoro (elem) {
   toggleButton(elem.id)
   hideArrows()
   
-  if (runningClock === null || runningClock != 0) {
+  if (runningClock === null || runningClock !== 0) {
     runClock()
     body.style.backgroundColor = 'LightGreen'
   } else {
