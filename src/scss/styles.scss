@@ -1,6 +1,12 @@
 /* Mobile styles */
 @media only screen and (max-width: 400px) {
-  
+  #timer {
+    margin-top: 125px;
+  }
+
+  #progressBar {
+    width: 80%;
+  }
 }
 
 /* Tablet styles */
@@ -9,8 +15,14 @@
 }
 
 /* Desktop styles */
-
 @media only screen and (min-width: 961px) {
+  #timer {
+    margin-top: 225px;
+  }
+
+  #progressBar {
+    width: 60%;
+  }
   
 }
 
@@ -21,7 +33,6 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-top: 125px;
 }
 
 #time {
@@ -30,7 +41,6 @@
 }
 
 #progressBar {
-  width: 80%;
   background-color: rgba(255, 255, 255, .2);
   border: 1px solid rgba(0, 0, 0, .2);
   margin: 25px auto;
@@ -43,8 +53,15 @@
 
 /* Arrows */
 .arrow {
-  margin: 0px 15px;
   vertical-align: middle;
+}
+
+.arrow-decrease {
+  margin-right: 15px;
+}
+
+.arrow-increase {
+  margin-left: 15px;
 }
 
 /* Buttons */
@@ -69,6 +86,11 @@ button {
     background-color: white;
     color: rgb(150, 150, 150);
     border: 1px dashed rgb(150, 150, 150);
+    border-radius: 7px;
     cursor: not-allowed;
+  }
+
+  &:active {
+    outline: none;
   }
 }

@@ -4,7 +4,7 @@ const time = document.getElementById('time')
 const startButton = document.getElementById('startButton')
 const pauseButton = document.getElementById('pauseButton')
 const resetButton = document.getElementById('resetButton')
-const arrowsToChangeTimer = document.querySelectorAll('.changetime')
+const arrowsToChangeTimer = document.querySelectorAll('.arrow')
 const currentProgress = document.getElementById('currentProgress')
 const standardMinutes = 25
 
