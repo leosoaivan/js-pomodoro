@@ -6,3 +6,5 @@ JS-Pomodoro is simple vanilla Javascript implementation of a pomodoro timer.
 
 Read more on the [Wikipedia article](https://en.wikipedia.org/wiki/Pomodoro_Technique).
 
+Viewable [here](http://leosoaivan.com/js-pomodoro/)
+
